@@ -45,6 +45,12 @@ strike {
   max-width: 600px;
 }
 
+#task-title {
+  display: inline-block;
+  max-width: 300px;
+  overflow-wrap: break-word;
+}
+
 .flex-wrapper {
   display: flex;
   gap: 10px;
