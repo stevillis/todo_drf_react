@@ -51,7 +51,6 @@ class App extends Component {
   fetchTasks(requestURL, method, body) {
     const csrftoken = this.getCookie('csrftoken');
 
-    console.log(body);
     fetch(requestURL, {
       method: method,
       headers: {
@@ -88,10 +87,16 @@ class App extends Component {
     return `${day}/${month}/${year} ${hour}:${minute}:${second}`
   }
 
+  startEdit(task) {
+    this.setState({
+      activeItem: task,
+      editing: true
+    });
+  }
+
   handleChange(e) {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(name, value)
 
     this.setState({
       activeItem: {
@@ -104,12 +109,17 @@ class App extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    console.log(`${API_URL}task-create/`);
-    this.fetchTasks(`${API_URL}task-create/`, 'POST', JSON.stringify(this.state.activeItem));
+    if (this.state.editing) {
+      this.fetchTasks(`${API_URL}task-update/${this.state.activeItem.id}/`, 'PUT', JSON.stringify(this.state.activeItem));
+      this.setState({ editing: false })
+    }
+    else this.fetchTasks(`${API_URL}task-create/`, 'POST', JSON.stringify(this.state.activeItem));
   }
 
   render() {
     const tasks = this.state.taskList;
+    const self = this;
+
     return (
       <div className="container">
         <h1 className="text-center bg-info text-white rounded" id="pageTitle">To Do</h1>
@@ -153,7 +163,7 @@ class App extends Component {
                         task.completed ? <span><br /><small>Concluída em: {updatedFormated}</small></span> : ''
                       }
                     </div>
-                    <div style={{ flex: 1 }} className="text-center">
+                    <div style={{ flex: 1 }} className="text-center" onClick={() => self.startEdit(task)}>
                       <button className="btn btn-sm btn-outline-info edit">
                         <i className="fa-solid fa-pencil"></i>
                       </button>
