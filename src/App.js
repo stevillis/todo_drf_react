@@ -98,6 +98,11 @@ class App extends Component {
     this.fetchTasks(`task-delete/${task.id}/`, 'DELETE', JSON.stringify(task));
   }
 
+  strikeUnstrike(task) {
+    task.completed = !task.completed;
+    this.fetchTasks(`task-update/${task.id}/`, 'PUT', JSON.stringify(task));
+  }
+
   handleChange(e) {
     const value = e.target.value;
 
@@ -152,7 +157,7 @@ class App extends Component {
                 const dataRowId = `data-row-${index}`;
                 return (
                   <div key={index} id={dataRowId} className="task-wrapper flex-wrapper">
-                    <div style={{ flex: 7 }} className="data">
+                    <div style={{ flex: 7 }} className="data" onClick={() => self.strikeUnstrike(task)}>
                       {
                         task.completed ?
                           <span id="task-title" className="title line-through">{task.title}</span> :
