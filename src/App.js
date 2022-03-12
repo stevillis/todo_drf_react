@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 
 import './App.css';
 
+const PROD_BASE_URL = 'https://todo-drf-vanillajs.herokuapp.com/';
 const DEV_BASE_URL = 'http://127.0.0.1:8000/';
-const API_URL = `${DEV_BASE_URL}api/`;
+
+const API_URL = `${PROD_BASE_URL}api/`;
 
 class App extends Component {
   constructor(props) {
@@ -130,7 +132,7 @@ class App extends Component {
 
     return (
       <div className="container">
-        <h1 className="text-center bg-info text-white rounded" id="pageTitle">To Do</h1>
+        <h1 className="text-center bg-info text-white rounded" id="pageTitle">To Do - React</h1>
         <div id="task-container" className="border-rounded">
           <div id="form-wrapper" className="border-rounded-top">
             <form id="form" onSubmit={this.handleSubmit}>
