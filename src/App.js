@@ -29,7 +29,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.fetchTasks(`${API_URL}task-list/`, 'GET', null);
+    this.fetchTasks('task-list/', 'GET', null);
   }
 
   getCookie(name) {
@@ -48,10 +48,10 @@ class App extends Component {
     return cookieValue;
   }
 
-  fetchTasks(requestURL, method, body) {
+  fetchTasks(endpoint, method, body) {
     const csrftoken = this.getCookie('csrftoken');
 
-    fetch(requestURL, {
+    fetch(`${API_URL}${endpoint}`, {
       method: method,
       headers: {
         'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ class App extends Component {
       .then(tasks => {
         if (method === 'GET') this.setState({ taskList: tasks });
         else {
-          this.fetchTasks(`${API_URL}task-list/`, 'GET', null);
+          this.fetchTasks('task-list/', 'GET', null);
           this.setState({
             activeItem: {
               id: null,
@@ -94,8 +94,11 @@ class App extends Component {
     });
   }
 
+  deleteTask(task) {
+    this.fetchTasks(`task-delete/${task.id}/`, 'DELETE', JSON.stringify(task));
+  }
+
   handleChange(e) {
-    const name = e.target.name;
     const value = e.target.value;
 
     this.setState({
@@ -110,10 +113,10 @@ class App extends Component {
     e.preventDefault();
 
     if (this.state.editing) {
-      this.fetchTasks(`${API_URL}task-update/${this.state.activeItem.id}/`, 'PUT', JSON.stringify(this.state.activeItem));
+      this.fetchTasks(`task-update/${this.state.activeItem.id}/`, 'PUT', JSON.stringify(this.state.activeItem));
       this.setState({ editing: false })
     }
-    else this.fetchTasks(`${API_URL}task-create/`, 'POST', JSON.stringify(this.state.activeItem));
+    else this.fetchTasks('task-create/', 'POST', JSON.stringify(this.state.activeItem));
   }
 
   render() {
@@ -128,7 +131,7 @@ class App extends Component {
             <form id="form" onSubmit={this.handleSubmit}>
               <div className="flex-wrapper">
                 <div style={{ flex: 6 }}>
-                  <input type="text" id="title" name="title" value={this.state.activeItem.title} className="form-control" placeholder="Add task" maxlength="60" onChange={this.handleChange} />
+                  <input type="text" id="title" name="title" value={this.state.activeItem.title} className="form-control" placeholder="Add task" maxLength="60" onChange={this.handleChange} />
                 </div>
                 <div style={{ flex: 1 }}>
                   <button id="submit" className="btn btn-outline-success" type="submit">
@@ -169,7 +172,7 @@ class App extends Component {
                       </button>
                     </div>
                     <div style={{ flex: 1 }} className="text-center">
-                      <button className="btn btn-sm btn-outline-danger delete">
+                      <button className="btn btn-sm btn-outline-danger delete" onClick={() => self.deleteTask(task)}>
                         <i className="fa-solid fa-trash"></i>
                       </button>
                     </div>
