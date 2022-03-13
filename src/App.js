@@ -122,8 +122,7 @@ class App extends Component {
     if (this.state.editing) {
       this.fetchTasks(`task-update/${this.state.activeItem.id}/`, 'PUT', JSON.stringify(this.state.activeItem));
       this.setState({ editing: false })
-    }
-    else this.fetchTasks('task-create/', 'POST', JSON.stringify(this.state.activeItem));
+    } else this.fetchTasks('task-create/', 'POST', JSON.stringify(this.state.activeItem));
   }
 
   render() {
@@ -132,6 +131,13 @@ class App extends Component {
 
     return (
       <div className="container">
+        <div id="banner" className="text-center">
+          <span id="forkongithub">
+            <a href={PROD_BASE_URL}>
+              VanillaJS
+            </a>
+          </span>
+        </div>
         <h1 className="text-center bg-info text-white rounded" id="pageTitle">To Do - React</h1>
         <div id="task-container" className="border-rounded">
           <div id="form-wrapper" className="border-rounded-top">
